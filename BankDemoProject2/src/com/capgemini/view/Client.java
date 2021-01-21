@@ -1,8 +1,7 @@
 package com.capgemini.view;
 import com.capgemini.exceptions.*;
-import com.capgemini.service.Bank;
-import com.capgemini.service.BankOfIndia;
-
+import com.capgemini.modle.Bank;
+import com.capgemini.controller.BankOfIndia;
 import java.util.Scanner;
 
 public class Client {
@@ -11,7 +10,6 @@ public class Client {
 		Scanner sc = new Scanner(System.in);
 		Integer accNo;
 		Integer amt;
-		Integer bal;
 		while(true)
 		{
 			System.out.println("MENU:");
@@ -24,14 +22,10 @@ public class Client {
 				accNo = sc.nextInt();
 				System.out.println("Enter Deposit Amount:");
 				Integer deposit = sc.nextInt();
-				try {
-					if(bank.createAccount(accNo, deposit))
-						System.out.println("Account Created Successfully!");
-					else
-						System.out.println("Unable to open Account!");
-				} catch (InsufficientOpeningBalanceException e) {
-					System.out.println("UNABLE TO OPEN ACCOUNT : Minimum opening balance is 500");
-				}
+				if(bank.CreateAccount(accNo, deposit))
+					System.out.println("Account Created Successfully!");
+				else
+					System.out.println("Unable to open Account!");
 				break;
 			case 2:
 				System.out.println("Enter Account Number:");
@@ -49,22 +43,18 @@ public class Client {
 						case 1:
 							System.out.println("Enter Amount:");
 							amt = sc.nextInt();
-							bal =bank.depositAmount(accNo, amt);
-							if(bal!=null) {
+							if(bank.depositAmount(accNo, amt)) {
 								System.out.println("Amount Deposit Successfully!");
-								System.out.println("Current Balance: "+bal);
 							}
 							break;
 						case 2:
 							System.out.println("Enter Amount:");
 							amt = sc.nextInt();
 							try {
-								bal= bank.withdrawAmount(accNo, amt);
-								if(bal!=null) {
+								if(bank.withdrawAmount(accNo, amt)) {
 									System.out.println("Amount Withdrawn Successfully!");
-									System.out.println("Current Balance: "+bal);
 								}
-							} catch (InsufficientBalanceException e) {
+							} catch (Exception e) {
 								System.out.println("INSUFFICIENT BALANCE!");
 							}
 							
@@ -77,17 +67,14 @@ public class Client {
 									System.out.println("Enter Amount:");
 									amt = sc.nextInt();
 									try {
-										Integer[] arr=bank.fundTransfer(accNo,rAcc,amt);
-										if(arr!=null) {
+										if(bank.fundTransfer(accNo,rAcc,amt)) {
 											System.out.println("Amount Trasferred Successfully!");
-											System.out.println("Sender's Current Balance:"+arr[0]);
-											System.out.println("Reciever's Current Balance:"+arr[1]);
 										}
-									} catch (InsufficientBalanceException e) {
+									} catch (Exception e) {
 										System.out.println("INSUFFICIENT BALANCE!");
 									}
 								}
-							} catch (AccountNotFoundException e) {
+							} catch (Exception e) {
 								System.out.println("Reciever's Account Not Found!");
 							}
 							
@@ -112,8 +99,6 @@ public class Client {
 				System.out.println("Please Enter Valid Choice!");
 			}
 		}
-	
 	}
-	
 }
 
