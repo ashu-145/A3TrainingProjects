@@ -28,7 +28,7 @@ public class Client {
 					if(bank.createAccount(accNo, deposit))
 						System.out.println("Account Created Successfully!");
 					else
-						System.out.println("Unable to open Account!");
+						System.out.println("Unable to open Account : Record exist with this Account Number");
 				} catch (InsufficientOpeningBalanceException e) {
 					System.out.println("UNABLE TO OPEN ACCOUNT : Minimum opening balance is 500");
 				}
